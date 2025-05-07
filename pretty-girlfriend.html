@@ -1,0 +1,151 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Pretty Girl</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #ffe6f2;
+            color: #ff4d94;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .password-container {
+            margin-bottom: 15px;
+        }
+        input[type="password"], input[type="text"] {
+            padding: 8px;
+            font-size: 1rem;
+            border: 2px solid #ff4d94;
+            border-radius: 8px;
+            background-color: #fff0f5;
+            width: 80%;
+            max-width: 300px;
+        }
+        button {
+            padding: 8px 15px;
+            font-size: 1rem;
+            background-color: #ff80bf;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #ff4d94;
+        }
+        .message {
+            display: none;
+            animation: fadeIn 1s;
+            font-size: 1.1rem;
+            padding: 10px;
+            background-color: #fff0f5;
+            border-radius: 10px;
+            margin: 10px 0;
+            min-height: 50px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .heart {
+            font-size: 1.5rem;
+            color: #ff4d94;
+        }
+    </style>
+</head>
+<body>
+    <div id="password-container" class="password-container">
+        <h1>✨ For My Pretty Girl ✨</h1>
+        <input type="password" id="password" placeholder="Enter secret code">
+        <button onclick="checkPassword()">Unlock us 💕</button>
+    </div>
+
+    <div id="message-container" class="password-container" style="display: none;">
+        <h2>Write Your Message! 🌸</h2>
+        <input type="text" id="user-message" placeholder="Type something sweet...">
+        <button onclick="displayMessage()">Show My Message 💖</button>
+    </div>
+
+    <div id="display-message" class="message">
+        <p id="shown-message"></p>
+        <p class="heart">💖 From Me to You 💖</p>
+    </div>
+
+    <script>
+        const password = "koky"; // Change this to a secret code only you and she know
+
+        function checkPassword() {
+            const input = document.getElementById("password").value;
+            if (input === password) {
+                document.getElementById("password-container").style.display = "none";
+                document.getElementById("message-container").style.display = "block";
+            } else {
+                alert("Oops! Wrong code, try our special word key! 💕");
+            }
+        }
+
+        function displayMessage() {
+            const message = document.getElementById("user-message").value.trim();
+            if (message) {
+                document.getElementById("display-message").style.display = "block";
+                document.getElementById("shown-message").textContent = message;
+                document.getElementById("user-message").value = ""; // Clear input
+            } else {
+                alert("Please write a message first! 💕");
+            }
+        }
+    </script>
+</body>
+</html>
