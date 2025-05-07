@@ -34,8 +34,9 @@
             max-width: 300px;
         }
         textarea {
-            height: 100px;
+            height: 80px;
             resize: none;
+            margin-bottom: 10px;
         }
         button {
             padding: 8px 15px;
@@ -45,20 +46,26 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         button:hover {
             background-color: #ff4d94;
         }
-        .message {
+        .message-container {
             display: none;
             animation: fadeIn 1s;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .message {
             font-size: 1.1rem;
-            padding: 10px;
+            padding: 8px;
             background-color: #fff0f5;
-            border-radius: 10px;
-            margin: 10px 0;
-            min-height: 50px;
+            border-radius: 8px;
+            margin: 5px 0;
+            word-wrap: break-word;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -77,10 +84,11 @@
         <button onclick="checkPassword()">Unlock us 💕</button>
     </div>
 
-    <div id="message-container" class="message" style="display: none;">
-        <h2>Our Shared Messages! 🌸</h2>
-        <textarea id="shared-message" placeholder="Write something sweet..."></textarea>
+    <div id="message-container" class="message-container">
+        <h2>Our Love Messages! 🌸</h2>
+        <textarea id="new-message" placeholder="Write something sweet..."></textarea>
         <button onclick="saveMessage()">Save Message 💖</button>
+        <div id="message-log"></div>
         <p class="heart">💖 From Us to Each Other 💖</p>
     </div>
 
@@ -89,20 +97,19 @@
     <script>
         // Replace with your Firebase config
         const firebaseConfig = {
-        apiKey: "AIzaSyBc3SIkXkTzWt5oznQoNcickDD5AtwZf7Y",
-        authDomain: "my-pretty-girl-b3594.firebaseapp.com",
-        databaseURL: "https://my-pretty-girl-b3594-default-rtdb.firebaseio.com",
-        projectId: "my-pretty-girl-b3594",
-        storageBucket: "my-pretty-girl-b3594.firebasestorage.app",
-        messagingSenderId: "783399852126",
-        appId: "1:783399852126:web:0d5386d0b902e8f79a3ccf",
-        measurementId: "G-XZV12LKKDY"
+            apiKey: "your-api-key",
+            authDomain: "your-project-id.firebaseapp.com",
+            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project-id.appspot.com",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const messageRef = database.ref('sharedMessage');
+        const messagesRef = database.ref('messages');
 
         const password = "love123"; // Change this to a secret code only you and she know
 
@@ -111,31 +118,38 @@
             if (input === password) {
                 document.getElementById("password-container").style.display = "none";
                 document.getElementById("message-container").style.display = "block";
-                loadMessage(); // Load the shared message
+                loadMessages(); // Load all saved messages
             } else {
                 alert("Oops! Wrong code, try our special word key! 💕");
             }
         }
 
         function saveMessage() {
-            const message = document.getElementById("shared-message").value.trim();
-            if (message) {
-                messageRef.set({
-                    text: message,
+            const messageText = document.getElementById("new-message").value.trim();
+            if (messageText) {
+                const newMessage = {
+                    text: messageText,
                     timestamp: Date.now()
-                });
+                };
+                messagesRef.push(newMessage); // Add new message to the database
+                document.getElementById("new-message").value = ""; // Clear the text area
                 alert("Message saved! 💕");
             } else {
                 alert("Please write a message first! 💕");
             }
         }
 
-        function loadMessage() {
-            messageRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.text) {
-                    document.getElementById("shared-message").value = data.text;
-                }
+        function loadMessages() {
+            messagesRef.on('value', (snapshot) => {
+                const messages = snapshot.val() || {};
+                const messageLog = document.getElementById("message-log");
+                messageLog.innerHTML = ""; // Clear current messages
+                Object.values(messages).forEach(message => {
+                    const messageDiv = document.createElement("div");
+                    messageDiv.className = "message";
+                    messageDiv.textContent = message.text;
+                    messageLog.appendChild(messageDiv);
+                });
             });
         }
     </script>
