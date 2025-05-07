@@ -107,18 +107,18 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const messagesRef = database.ref('messages');
 
-        const password = "koky"; // Change this to a secret code only you and she know
+        const password = "love123"; // Change this to a secret code only you and she know
 
         function checkPassword() {
             const input = document.getElementById("password").value;
             if (input === password) {
                 document.getElementById("password-container").style.display = "none";
                 document.getElementById("message-container").style.display = "block";
-                loadMessages(); // Load all saved messages
+                loadMessages();
             } else {
                 alert("Oops! Wrong code, try our special word key! 💕");
             }
@@ -131,9 +131,16 @@
                     text: messageText,
                     timestamp: Date.now()
                 };
-                messagesRef.push(newMessage); // Add new message to the database
-                document.getElementById("new-message").value = ""; // Clear the text area
-                alert("Message saved! 💕");
+                messagesRef.push(newMessage)
+                    .then(() => {
+                        console.log("Message saved successfully");
+                        document.getElementById("new-message").value = "";
+                        alert("Message saved! 💕");
+                    })
+                    .catch((error) => {
+                        console.error("Error saving message:", error);
+                        alert("Failed to save message: " + error.message);
+                    });
             } else {
                 alert("Please write a message first! 💕");
             }
@@ -150,6 +157,9 @@
                     messageDiv.textContent = message.text;
                     messageLog.appendChild(messageDiv);
                 });
+            }, (error) => {
+                console.error("Error loading messages:", error);
+                alert("Failed to load messages: " + error.message);
             });
         }
     </script>
