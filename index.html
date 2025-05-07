@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            background-color: #ffe6f2;
-            color: #ff4d94;
+            background-color: #fff0f5;
+            color: #ff69b4;
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -16,56 +16,110 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="%23ffb6c1" opacity="0.2"/></svg>');
+            background-size: 50px 50px;
         }
         h1 {
             font-size: 1.5rem;
             margin-bottom: 15px;
+            color: #ff1493;
+            text-shadow: 1px 1px #fff0f5;
         }
         .password-container {
             margin-bottom: 15px;
         }
-        input[type="password"], textarea {
-            padding: 8px;
+        input[type="password"] {
+            padding: 10px;
             font-size: 1rem;
-            border: 2px solid #ff4d94;
-            border-radius: 8px;
-            background-color: #fff0f5;
+            border: 2px solid #ff69b4;
+            border-radius: 15px;
+            background-color: #ffe4e1;
             width: 80%;
             max-width: 300px;
-        }
-        textarea {
-            height: 80px;
-            resize: none;
-            margin-bottom: 10px;
+            box-shadow: 2px 2px 5px #ffb6c1;
         }
         button {
-            padding: 8px 15px;
+            padding: 10px 20px;
             font-size: 1rem;
             background-color: #ff80bf;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 20px;
             cursor: pointer;
             margin-top: 5px;
+            box-shadow: 2px 2px 5px #ffb6c1;
+            transition: transform 0.2s;
         }
         button:hover {
-            background-color: #ff4d94;
+            background-color: #ff1493;
+            transform: scale(1.1);
+        }
+        #next-button {
+            background-color: #ffb6c1;
+            font-size: 1.1rem;
+            padding: 12px 25px;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        #next-button::after {
+            content: "💕";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        #next-button:hover {
+            background-color: #ff69b4;
         }
         .message-container {
             display: none;
             animation: fadeIn 1s;
-            text-align: left;
-            max-height: 200px;
+            text-align: center;
+            max-height: 300px;
             overflow-y: auto;
             margin-top: 10px;
         }
         .message {
             font-size: 1.1rem;
-            padding: 8px;
-            background-color: #fff0f5;
-            border-radius: 8px;
-            margin: 5px 0;
+            padding: 12px;
+            background-color: #ffe4e1;
+            border-radius: 20px;
+            margin: 10px auto;
             word-wrap: break-word;
+            max-width: 90%;
+            box-shadow: 2px 2px 5px #ffb6c1;
+            position: relative;
+            border: 2px solid #ff69b4;
+        }
+        .message::before {
+            content: "💖";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        .message::after {
+            content: "🌸";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        .timer {
+            font-size: 1.1rem;
+            color: #ff1493;
+            background-color: #ffe4e1;
+            border: 2px solid #ff69b4;
+            border-radius: 15px;
+            padding: 8px 12px;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: 2px 2px 5px #ffb6c1;
+            text-shadow: 1px 1px #fff0f5;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -73,7 +127,7 @@
         }
         .heart {
             font-size: 1.5rem;
-            color: #ff4d94;
+            color: #ff1493;
         }
     </style>
 </head>
@@ -85,82 +139,71 @@
     </div>
 
     <div id="message-container" class="message-container">
-        <h2>Our Love Messages! 🌸</h2>
-        <textarea id="new-message" placeholder="Write something sweet..."></textarea>
-        <button onclick="saveMessage()">Save Message 💖</button>
+        <h2>Our Love Story! 🌸</h2>
+        <div class="timer" id="love-timer">Days: 0, Hours: 0, Minutes: 0, Seconds: 0</div>
         <div id="message-log"></div>
-        <p class="heart">💖 From Us to Each Other 💖</p>
+        <button id="next-button" onclick="showNextMessage()">Next Message 💕</button>
+        <p class="heart">💖 From Me to You 💖</p>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script>
-        // Replace with your Firebase config
-        const firebaseConfig = {
-            apiKey: "your-api-key",
-            authDomain: "your-project-id.firebaseapp.com",
-            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project-id.appspot.com",
-            messagingSenderId: "your-sender-id",
-            appId: "your-app-id"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const messagesRef = database.ref('messages');
-
         const password = "love123"; // Change this to a secret code only you and she know
+
+        const startDate = new Date('2025-04-30T10:00:00'); // When you started talking
+
+        const messages = [
+            "Hey, I just met you, and wow, you’re so pretty! 🌟",
+            "I love how your eyes sparkle when you laugh! You’re amazing. ✨",
+            "Every moment with you feels magical. You’re a sunshine! ☀️",
+            "I’m so lucky to have you in my life, my beautiful girl! 🌸",
+            "Your beauty takes my breath away every day.! 💖",
+            "Here’s to more moments together, my pretty girl! 🥰"
+        ];
+
+        let currentMessageIndex = 0;
 
         function checkPassword() {
             const input = document.getElementById("password").value;
             if (input === password) {
                 document.getElementById("password-container").style.display = "none";
                 document.getElementById("message-container").style.display = "block";
-                loadMessages();
+                startTimer(); // Start the timer
+                showNextMessage(); // Show the first message
             } else {
                 alert("Oops! Wrong code, try our special word key! 💕");
             }
         }
 
-        function saveMessage() {
-            const messageText = document.getElementById("new-message").value.trim();
-            if (messageText) {
-                const newMessage = {
-                    text: messageText,
-                    timestamp: Date.now()
-                };
-                messagesRef.push(newMessage)
-                    .then(() => {
-                        console.log("Message saved successfully");
-                        document.getElementById("new-message").value = "";
-                        alert("Message saved! 💕");
-                    })
-                    .catch((error) => {
-                        console.error("Error saving message:", error);
-                        alert("Failed to save message: " + error.message);
-                    });
-            } else {
-                alert("Please write a message first! 💕");
+        function startTimer() {
+            function updateTimer() {
+                const now = new Date();
+                const diffMs = now - startDate;
+                const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+                document.getElementById("love-timer").textContent = `Days: ${days}, Hours: ${hours}, Minutes: ${minutes}, Seconds: ${seconds}`;
             }
+            updateTimer(); // Initial update
+            setInterval(updateTimer, 1000); // Update every second
         }
 
-        function loadMessages() {
-            messagesRef.on('value', (snapshot) => {
-                const messages = snapshot.val() || {};
+        function showNextMessage() {
+            if (currentMessageIndex < messages.length) {
+                const message = messages[currentMessageIndex];
                 const messageLog = document.getElementById("message-log");
-                messageLog.innerHTML = ""; // Clear current messages
-                Object.values(messages).forEach(message => {
-                    const messageDiv = document.createElement("div");
-                    messageDiv.className = "message";
-                    messageDiv.textContent = message.text;
-                    messageLog.appendChild(messageDiv);
-                });
-            }, (error) => {
-                console.error("Error loading messages:", error);
-                alert("Failed to load messages: " + error.message);
-            });
+
+                const messageDiv = document.createElement("div");
+                messageDiv.className = "message";
+                messageDiv.textContent = message;
+
+                messageLog.appendChild(messageDiv);
+
+                currentMessageIndex++;
+                if (currentMessageIndex === messages.length) {
+                    document.getElementById("next-button").style.display = "none"; // Hide button when done
+                }
+            }
         }
     </script>
 </body>
