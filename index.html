@@ -11,12 +11,11 @@
             color: #ff69b4;
             text-align: center;
             margin: 0;
-            padding: 20px;
-            height: 100vh;
+            padding: 10px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            overflow-y: auto;
+            justify-content: flex-start;
             position: relative;
         }
         body::before {
@@ -27,18 +26,18 @@
             width: 100%;
             height: 100%;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="%23ffb6c1" opacity="0.3"/><path d="M30 70 Q50 90 70 70" stroke="%23ff69b4" stroke-width="2" fill="none"/></svg>');
-            background-size: 60px 60px;
+            background-size: 50px 50px;
             opacity: 0.5;
             z-index: -1;
             animation: float 10s infinite alternate;
         }
         @keyframes float {
             from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
+            to { transform: translateY(-5px); }
         }
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            margin: 10px 0;
             color: #ff1493;
             text-shadow: 2px 2px 4px #fff0f5;
             position: relative;
@@ -53,34 +52,34 @@
             50% { transform: translateY(-5px); }
         }
         .password-container {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         input[type="password"] {
-            padding: 12px;
-            font-size: 1.1rem;
+            padding: 8px;
+            font-size: 1rem;
             border: 3px solid #ff69b4;
-            border-radius: 20px;
+            border-radius: 15px;
             background-color: #ffe4e1;
             width: 80%;
-            max-width: 320px;
-            box-shadow: 3px 3px 8px #ffb6c1, inset 1px 1px 3px #fff;
+            max-width: 280px;
+            box-shadow: 2px 2px 5px #ffb6c1, inset 1px 1px 3px #fff;
             transition: all 0.3s;
         }
         input[type="password"]:focus {
             border-color: #ff1493;
-            box-shadow: 3px 3px 8px #ff69b4;
+            box-shadow: 2px 2px 5px #ff69b4;
             transform: scale(1.02);
         }
         button {
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 8px 20px;
+            font-size: 1rem;
             background: linear-gradient(45deg, #ff80bf, #ff69b4);
             color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 3px 3px 8px #ffb6c1;
+            margin-top: 5px;
+            box-shadow: 2px 2px 5px #ffb6c1;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
@@ -92,10 +91,10 @@
         button::after {
             content: "💕";
             position: absolute;
-            right: 15px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             animation: heartbeat 1.5s infinite;
         }
         @keyframes heartbeat {
@@ -105,9 +104,9 @@
         }
         #next-button {
             background: linear-gradient(45deg, #ffb6c1, #ff69b4);
-            font-size: 1.2rem;
-            padding: 15px 30px;
-            border-radius: 30px;
+            font-size: 1.1rem;
+            padding: 10px 25px;
+            border-radius: 25px;
         }
         #next-button:hover {
             background: linear-gradient(45deg, #ff1493, #ffb6c1);
@@ -116,21 +115,21 @@
             display: none;
             animation: fadeIn 1s;
             text-align: center;
-            max-height: 300px;
+            max-height: 150px; /* Reduced height to minimize scrolling */
             overflow-y: auto;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .message {
-            font-size: 1.2rem;
-            padding: 15px;
+            font-size: 1rem;
+            padding: 10px;
             background: linear-gradient(135deg, #ffe4e1, #fff0f5);
-            border-radius: 25px;
-            margin: 15px auto;
+            border-radius: 20px;
+            margin: 8px auto;
             word-wrap: break-word;
             max-width: 90%;
-            box-shadow: 4px 4px 10px #ffb6c1, inset 2px 2px 5px #fff;
+            box-shadow: 3px 3px 8px #ffb6c1, inset 1px 1px 3px #fff;
             position: relative;
-            border: 3px solid #ff69b4;
+            border: 2px solid #ff69b4;
             transition: transform 0.3s;
         }
         .message:hover {
@@ -139,32 +138,32 @@
         .message::before {
             content: "💖";
             position: absolute;
-            left: 15px;
+            left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             animation: bounce 1.5s infinite;
         }
         .message::after {
             content: "🌸";
             position: absolute;
-            right: 15px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             animation: bounce 1.5s infinite;
         }
         .timer {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #ff1493;
             background: linear-gradient(135deg, #ffe4e1, #fff0f5);
-            border: 3px solid #ff69b4;
-            border-radius: 20px;
-            padding: 10px 15px;
+            border: 2px solid #ff69b4;
+            border-radius: 15px;
+            padding: 8px 12px;
             display: inline-block;
-            margin-bottom: 20px;
-            box-shadow: 4px 4px 10px #ffb6c1, inset 2px 2px 5px #fff;
-            text-shadow: 2px 2px 4px #fff0f5;
+            margin: 5px 0;
+            box-shadow: 3px 3px 8px #ffb6c1, inset 1px 1px 3px #fff;
+            text-shadow: 1px 1px 3px #fff0f5;
             position: relative;
         }
         .timer::before {
@@ -181,39 +180,40 @@
             to { opacity: 1; }
         }
         .heart {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #ff1493;
-            text-shadow: 2px 2px 4px #fff0f5;
+            text-shadow: 1px 1px 3px #fff0f5;
             animation: heartbeat 1.5s infinite;
+            margin: 5px 0;
         }
         .photo-frame {
-            margin: 15px auto;
-            max-width: 200px;
+            margin: 5px auto;
+            max-width: 150px; /* Reduced size to fit better */
             position: relative;
         }
         .photo-frame img {
             width: 100%;
             height: auto;
-            border-radius: 20px;
-            border: 3px solid #ff69b4;
-            box-shadow: 4px 4px 10px #ffb6c1;
+            border-radius: 15px;
+            border: 2px solid #ff69b4;
+            box-shadow: 3px 3px 8px #ffb6c1;
             position: relative;
             z-index: 1;
         }
         .photo-frame::before {
             content: "💖";
             position: absolute;
-            top: -10px;
-            left: 10px;
-            font-size: 1.5rem;
+            top: -8px;
+            left: 8px;
+            font-size: 1.2rem;
             animation: bounce 1.5s infinite;
         }
         .photo-frame::after {
             content: "🌸";
             position: absolute;
-            bottom: -10px;
-            right: 10px;
-            font-size: 1.5rem;
+            bottom: -8px;
+            right: 8px;
+            font-size: 1.2rem;
             animation: bounce 1.5s infinite;
         }
     </style>
@@ -230,7 +230,7 @@
         <div class="timer" id="love-timer">Days: 0, Hours: 0, Minutes: 0, Seconds: 0</div>
         <div class="photo-frame">
             <!-- Replace 'your-image-filename.jpg' with the actual filename you uploaded -->
-            <img src="WhatsApp Image 2025-05-14 at 11.28.26_9cf906ab.jpg" alt="Cute Picture of You" title="My Pretty Girl 💕">
+            <img src="your-image-filename.jpg" alt="Cute Picture of You" title="My Pretty Girl 💕">
         </div>
         <div id="message-log"></div>
         <button id="next-button" onclick="showNextMessage()">Next Message 💕</button>
@@ -243,13 +243,13 @@
         const startDate = new Date('2025-04-30T10:00:00'); // When you started talking
 
         const messages = [
-            "I love how you cutely bite me, it makes my heart beats! 💕",
+            "I love how you cutely bite me, it makes my heart flutter! 🐾💕",
             "You get more prettier every single day, my koky! 🌟✨",
-            "I like you even more when you’re tired and all messed up, you’re so adorable! 🌸",
-            "Your little bites are the sweetest thing ever, my pretty girl! 💖",
-            "Every day with you is magical, you just keep getting prettier! 💕",
-            "I can’t help but smile when you’re all tired and cute 😴💖",
-            "Here’s to more cute moments with my prettiest girl💕"
+            "I like you even more when you’re tired and all messed up, you’re so adorable! 🥰🌸",
+            "Your little bites are the sweetest thing ever, my pretty girl! 😽💖",
+            "Every day with you is magical, you just keep getting prettier! 🪄💕",
+            "I can’t help but smile when you’re all tired and cute, I love you so much! 😴💖",
+            "Here’s to more cute moments with my prettiest girl, I adore you! 🐾💕"
         ];
 
         let currentMessageIndex = 0;
