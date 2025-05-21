@@ -250,6 +250,27 @@
             font-size: 1.5rem;
             animation: bounce 1.5s infinite;
         }
+        .promise-list {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 400px;
+            background: linear-gradient(135deg, #ffe4e1, #fff0f5);
+            padding: 20px;
+            border-radius: 25px;
+            border: 3px solid #ff69b4;
+            box-shadow: 4px 4px 10px #ffb6c1, inset 2px 2px 4px #fff;
+        }
+        .promise-list li {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            position: relative;
+            padding-left: 30px;
+        }
+        .promise-list li::before {
+            content: "❤️";
+            position: absolute;
+            left: 0;
+        }
     </style>
 </head>
 <body>
@@ -276,7 +297,22 @@
         const nowDate = new Date ('2025-05-20T10:00:00');// When you started talking
 
         const messages = [
-            "Thank you for those 20 days ,it meant alot to me "
+            "Thank you for these 20 days, they meant so much to me 💖",
+            "I know I've made mistakes that hurt you, and I'm really sorry 😔",
+            "I want to make things right and be the person you deserve 🌸",
+            "Here's how I promise to make up for my mistakes:",
+            `<div class="promise-list">
+                <ol>
+                    <li>I'll listen more and be more understanding</li>
+                    <li>I'll be more patient and thoughtful</li>
+                    <li>I'll show you every day how much you mean to me</li>
+                    <li>I'll work on being more reliable and trustworthy</li>
+                </ol>
+            </div>`,
+            "You're so special in my life, and I don't want to lose you ",
+            "Every moment with you is precious, and I'll remember them all 💫",
+            "Thank you for giving me a chance to make things right 💌",
+            "always remember that you are , my pretty girl 💘"
         ];
 
         let currentMessageIndex = 0;
@@ -318,9 +354,21 @@
                 const message = messages[currentMessageIndex];
                 const messageDiv = document.createElement("div");
                 messageDiv.className = "message";
-                messageDiv.textContent = message;
+                
+                // Check if the message contains HTML (like our promise list)
+                if (message.startsWith('<')) {
+                    messageDiv.innerHTML = message;
+                } else {
+                    messageDiv.textContent = message;
+                }
+                
                 messageLog.appendChild(messageDiv);
                 currentMessageIndex++;
+                
+                // Hide next button if we've shown all messages
+                if (currentMessageIndex >= messages.length) {
+                    nextButton.textContent = "Read Again 💕";
+                }
             } else {
                 currentMessageIndex = 0; // Reset to start from the beginning
                 const message = messages[currentMessageIndex];
@@ -329,6 +377,7 @@
                 messageDiv.textContent = message;
                 messageLog.appendChild(messageDiv);
                 currentMessageIndex++;
+                nextButton.textContent = "Next Message 💕";
             }
         }
     </script>
